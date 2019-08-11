@@ -1,0 +1,3 @@
+[submodule "cowgol"]
+	path = cowgol
+	url = https://github.com/davidgiven/cowgol.git
