@@ -92,6 +92,11 @@ def main():
         help='Spectrum file name'
     )
     parser.add_argument(
+        '--prepend', metavar='SOURCETAP', type=argparse.FileType('rb'),
+        help='TAP file to prepend to the output of this file. ' +
+        'For example a basic loader.'
+    )
+    parser.add_argument(
         '--inject', metavar='FILE', type=argparse.FileType('rb'),
         help='Binary data to inject into BASIC program'
     )
@@ -127,6 +132,10 @@ def main():
             basic_line,
             data[pos + len(inject_marker):]
         ))
+
+    if args.prepend:
+        prepended_tap = args.prepend.read()
+        args.o.write(prepended_tap)
 
     make_tap(data, args.o, 0 if args.basic else 3, args.name, args.start)
 

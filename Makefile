@@ -9,20 +9,19 @@ LIBRARIES = \
 
 all: $(TARGET).tap
 
-%.tap: %.bin
-	bin/totap.py --start=0x6000 -o $@ $<
-
+# Build binary from Cowgol source
 %.bin: %.cow
 	cd $(COWGOL_DIR) && scripts/cowgol -a spectrum_on_native -o $(abspath $@) \
 		$(LIBRARIES) \
 		$(abspath $<)
 
-run.tap: $(TARGET).tap
-	cat boot.tap $(TARGET).tap >$@
+# Create tape image containing the binary code
+%.tap: %.bin
+	bin/totap.py -n $(TARGET) --start=0x6000 --prepend boot.tap -o $@ $<
 
 .PHONY: run
-run: run.tap
-	fuse run.tap
+run: $(TARGET).tap
+	fuse $(TARGET).tap
 
 .PHONY: disassemble
 disassemble: $(TARGET).bin
