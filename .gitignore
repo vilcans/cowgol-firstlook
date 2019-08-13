@@ -1,3 +1,4 @@
-*.tap
+test1.tap
+run.tap
 *.bin
 *.bin.log
